@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans&display=swap');
+
+body, html {
+  font-family: Google Sans, BlinkMacSystemFont, sans-serif !important;
+}
+
+.text-h4 {
+  font-weight: 400;
+  letter-spacing: 0 !important;
+}
+
+.v-toolbar__content {
+  overflow: visible!important;
+}
+
+header .container {
+  padding-bottom: 8px !important;
+  padding-top: 8px !important;
+}
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 12px;
+  width: 100%;
+}
+
+@media (min-width: 984px) {
+  .container {
+    max-width: 1032px;
+  }
+}
+
+.appbartop-grid {
+  align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  height: 48px;
+}
+
+.searchnav-width {
+  width: 100%;
+}
+
+@media (min-width: 1000px) {
+  .brand-logo {
+    min-width: 197px;
+  }
+
+  .searchnav-width {
+    max-width: 590px;
+  }
+}
+
+.searchnav-wrapper {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+}
+
+.input-datepicker .v-card-text {
+  padding: 0;
+}
+
+@media (min-width: 800px) {
+  .autocomplete-filter {
+    max-width: 45%;
+  }
+  .date-filter {
+    max-width: 21%;
+  }
+}
+
+.card-inner {
+  max-height: 420px;
+  overflow-y: auto;
+  position: absolute;
+  top: -20px;
+  width: inherit;
+  z-index: 5;
+  transform-origin: "center top 0px"
+}
+
+.text-button, .text-caption {
+  letter-spacing: 0 !important;
+  font-family: Roboto, BlinkMacSystemFont, sans-serif !important;
+}
+
+.text-button {
+  font-size: .75rem !important;
+  line-height: 1.2rem;
+}
