@@ -24,7 +24,7 @@
                 style="height: 40px; width: 100%; background-color: #f5f5f5;" @click="toggleSearch">
                 <v-icon>mdi-magnify</v-icon>
                 <span v-if="$device.isDesktop" class="text-truncate" style="min-width: 0; min-height: 0;">
-                  Fairmont Jakarta
+                  {{ propertyData.name }}
                 </span>
                 <span>&nbsp;&nbsp;·&nbsp;&nbsp;4 – 8 Mar 2025</span>
               </v-btn>
@@ -47,8 +47,33 @@
 </template>
 
 <script setup>
-import { useSearch } from '@/composables/useSearch';
 const { showSearch, toggleSearch } = useSearch();
+const route = useRoute();
+const propertyContentStore = usePropertyContentStore();
+const slug = route.params.slug;
+const checkin = route.query.checkin || null;
+const checkout = route.query.checkout || null;
+
+// Extract ID from slug
+const idMatch = slug.match(/(\d+)$/);
+const id = idMatch ? idMatch[1] : null;
+
+const propertyData = computed(() => propertyContentStore.properties[id] || {});
+
+const formatDate = (dateString, options = { day: 'numeric', month: 'short', year: 'numeric' }) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+};
+
+const formattedDateRange = computed(() => {
+  if (checkin && checkout) {
+    const checkinFormatted = formatDate(checkin, { day: 'numeric' });
+    const checkoutFormatted = formatDate(checkout, { day: 'numeric', month: 'short', year: 'numeric' });
+    return `${checkinFormatted} – ${checkoutFormatted}`;
+  }
+  return '';
+});
 </script>
 
 <style scoped></style>
