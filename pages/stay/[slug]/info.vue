@@ -8,8 +8,7 @@
         <v-divider v-if="!$device.isDesktop" class="mb-n1"></v-divider>
       </div>
     </div>
-    <StayFilterRooms />
-    <StayRoomCard />
+    Info
   </div>
 </template>
 <script setup>
@@ -20,20 +19,15 @@ definePageMeta({
   middleware: 'fetch-property-content',
 });
 
-// Access the current route
 const route = useRoute();
-
-// Local state for selected tab
-const selectedTab = ref('deals');
-
-// Dynamically build tabs
+const selectedTab = ref('info');
 const tabs = computed(() => {
   const basePath = route.path.split('/').slice(0, -1).join('/'); // Get the base path
   return [
     {
       label: 'Deals',
       icon: 'mdi-tag-outline',
-      route: { path: basePath, query: { ...route.query, tab: 'deals' } },
+      route: { path: `${basePath}`, query: { ...route.query, tab: 'deals' } },
       value: 'deals',
     },
     {
