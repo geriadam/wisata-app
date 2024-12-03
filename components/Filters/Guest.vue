@@ -85,7 +85,7 @@
 </template>
 
 <script>
-
+const filterStore = useFiltersStore();
 export default {
   setup() {
     const menuRoom = ref(false);
@@ -99,8 +99,22 @@ export default {
     const updateCount = (type, action) => {
       if (type === "guest") {
         guestCount.value = adjustValue(guestCount.value, action);
+        filterStore.setFilters({
+          checkin: filterStore.checkin,
+          checkout: filterStore.checkout,
+          guest_per_room: guestCount.value,
+          number_of_room: filterStore.number_of_room,
+          slug: filterStore.slug,
+        });
       } else if (type === "room") {
         roomCount.value = adjustValue(roomCount.value, action);
+        filterStore.setFilters({
+          checkin: filterStore.checkin,
+          checkout: filterStore.checkout,
+          guest_per_room: filterStore.guest_per_room,
+          number_of_room: roomCount.value,
+          slug: filterStore.slug,
+        });
       }
 
       formattedRoom()

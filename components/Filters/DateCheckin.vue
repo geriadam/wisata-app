@@ -31,6 +31,8 @@
 import { ref, computed } from "vue";
 import { format, addDays, eachDayOfInterval } from "date-fns";
 
+const filterStore = useFiltersStore();
+
 export default {
   setup() {
     // Initialize data
@@ -59,6 +61,14 @@ export default {
       }
 
       formattedDate.value = formatDisplay(checkin.value, checkout.value);
+
+      filterStore.setFilters({
+        checkin: format(checkin.value, "yyyy-MM-dd"),
+        checkout: format(checkout.value, "yyyy-MM-dd"),
+        guest_per_room: filterStore.guest_per_room,
+        number_of_room: filterStore.number_of_room,
+        slug: filterStore.slug,
+      });
 
       closeMenu();
     };

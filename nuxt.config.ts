@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  modules: ['@nuxt/eslint', '@nuxtjs/device'],
+  modules: ['@nuxt/eslint', '@nuxtjs/device', '@pinia/nuxt'],
   app: {
     baseURL: '/',
     head: {
@@ -20,5 +20,10 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ]
     },
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: 'https://project-technical-test-api.up.railway.app',
+    }
   },
 })

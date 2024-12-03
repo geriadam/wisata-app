@@ -11,7 +11,7 @@
         <FiltersGuest />
       </div>
       <div class="col-sm-12 col-md-auto col-12 pr-2">
-        <v-btn block height="100%" rounded="lg" variant="flat" color="primary">
+        <v-btn block height="100%" rounded="lg" variant="flat" color="primary" @click="handleSearch">
           <template #prepend>
             <v-icon style="font-size: 20px; height: 20px; width: 20px;">mdi-magnify</v-icon>
           </template>
@@ -22,5 +22,22 @@
   </v-sheet>
 </template>
 
-<script></script>
+<script setup>
+
+const filterStore = useFiltersStore();
+const router = useRouter();
+
+const handleSearch = () => {
+  const { slug, checkin, checkout, guest_per_room, number_of_room } = filterStore;
+  router.push({
+    path: `/stay/${slug}`,
+    query: {
+      checkin,
+      checkout,
+      guest_per_room,
+      number_of_room,
+    },
+  });
+};
+</script>
 <style scoped></style>
