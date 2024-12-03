@@ -1,6 +1,6 @@
 <template>
   <v-text-field id="room-activator" v-model="formattedRoom" label="Guests & Rooms" variant="outlined" rounded="lg"
-    :readonly="true" :hide-details="true" type="button" @click="openMenu">
+    :readonly="true" :hide-details="true" type="button">
     <template #prepend-inner>
       <v-icon>mdi-account-multiple-outline</v-icon>
     </template>

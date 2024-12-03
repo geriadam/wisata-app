@@ -20,13 +20,13 @@
           <!-- Search Bar -->
           <div class="d-flex justify-center mr-2 ml-sm-6 mr-sm-6" style="min-width: 0; min-height: 0;">
             <div class="searchnav-width">
-              <v-btn class="appsearchbar-btn text-body-2 font-weight-medium" variant="block"
+              <v-btn class="appsearchbar-btn text-body-2 font-weight-medium" block
                 style="height: 40px; width: 100%; background-color: #f5f5f5;" @click="toggleSearch">
                 <v-icon>mdi-magnify</v-icon>
                 <span v-if="$device.isDesktop" class="text-truncate" style="min-width: 0; min-height: 0;">
                   {{ propertyData.name }}
                 </span>
-                <span>&nbsp;&nbsp;·&nbsp;&nbsp;4 – 8 Mar 2025</span>
+                <span>&nbsp;&nbsp;·&nbsp;&nbsp; {{ formattedDateRange }}</span>
               </v-btn>
             </div>
           </div>
@@ -53,12 +53,9 @@ const propertyContentStore = usePropertyContentStore();
 const slug = route.params.slug;
 const checkin = route.query.checkin || null;
 const checkout = route.query.checkout || null;
+const propertyId = extractPropertyId(slug);
 
-// Extract ID from slug
-const idMatch = slug.match(/(\d+)$/);
-const id = idMatch ? idMatch[1] : null;
-
-const propertyData = computed(() => propertyContentStore.properties[id] || {});
+const propertyData = computed(() => propertyContentStore.properties[propertyId] || {});
 
 const formatDate = (dateString, options = { day: 'numeric', month: 'short', year: 'numeric' }) => {
   if (!dateString) return '';
