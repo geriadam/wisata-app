@@ -2,12 +2,12 @@
   <div style="position: relative;">
     <v-text-field v-model="searchQuery" label="Where are you going?" variant="outlined" rounded="lg" :focused="isFocused"
       clearable :color="searchQuery.length > 0 || isFocused ? 'primary' : 'default'" :hide-details="true"
-      :error="error" :error-messages="errorMessages" @focus="onFocus" @blur="onBlur" @update:modelValue="onSearch">
+      :error="error" @click:clear="onClear" :error-messages="errorMessages" @focus="onFocus" @blur="onBlur" @update:modelValue="onSearch">
       <template #prepend-inner>
         <v-icon :color="isFocused ? 'primary' : 'default'">mdi-map-marker-outline</v-icon>
       </template>
       <template #clear>
-        <v-icon :color="isFocused ? 'primary' : 'default'">mdi-close-circle</v-icon>
+        <v-icon @click="onClear" :color="isFocused ? 'primary' : 'default'">mdi-close-circle</v-icon>
       </template>
       <v-menu v-model="openMenu" height="420px" :open-on-click="openMenu" target="parent">
         <v-list class="px-2 py-0 pt-2 w-search-autocomplete">
@@ -88,6 +88,10 @@ const onFocus = () => {
     onSearch(searchQuery.value);
   }
 };
+
+const onClear = () => {
+  searchQuery.value = ''
+}
 
 const onBlur = () => {
   isFocused.value = false;

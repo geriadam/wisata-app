@@ -1,16 +1,18 @@
 <template>
-  <v-tabs v-model="activeTab" align-tabs="center" background-color="transparent" class="tab-no-background mt-1">
-    <div v-for="(tab, index) in combinedTabs" :key="index" class="d-flex">
-      <div class="pl-2"></div>
-      <v-tab :value="tab.value" variant="text" class="tab-no-background pb-2 pt-2" color="primary" :to="tab.route">
-        <v-icon :style="iconStyle">{{ tab.icon }}</v-icon>
-        <span v-if="$device.isDesktop" class="text-button font-weight-medium">
-          {{ tab.label }}
-        </span>
-      </v-tab>
-      <div class="pr-2"></div>
-    </div>
-  </v-tabs>
+  <div :key="route.fullPath">
+    <v-tabs v-model="activeTab" align-tabs="center" background-color="transparent" class="tab-no-background mt-1">
+      <div v-for="(tab, index) in combinedTabs" :key="tab.key" class="d-flex">
+        <div class="pl-2"></div>
+        <v-tab :value="tab.value" variant="text" class="tab-no-background pb-2 pt-2" color="primary" :to="tab.route">
+          <v-icon :style="iconStyle">{{ tab.icon }}</v-icon>
+          <span v-if="$device.isDesktop" class="text-button font-weight-medium">
+            {{ tab.label }}
+          </span>
+        </v-tab>
+        <div class="pr-2"></div>
+      </div>
+    </v-tabs>
+  </div>
 </template>
 
 <script setup>
@@ -29,7 +31,7 @@ const activeTab = ref(getActiveTabFromRoute());
 const slug = route.params.slug || '';
 
 watch(
-  () => route.query.tab,
+  () => route.fullPath,
   (newTab) => {
     if (newTab && isTabValueValid(newTab)) {
       activeTab.value = newTab;
@@ -69,6 +71,8 @@ const defaultTabs = computed(() => [
 ]);
 
 const combinedTabs = computed(() => props.tabs.length > 0 ? props.tabs : defaultTabs.value);
+
+console.log(combinedTabs)
 
 function getActiveTabFromRoute() {
   const tabFromRoute = route.query.tab;

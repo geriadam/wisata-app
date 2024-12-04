@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar scroll-behavior="elevate" scroll-threshold="-10" class="d-print-none bg-white"
+  <v-app-bar :key="route.fullPath" scroll-behavior="elevate" scroll-threshold="-10" class="d-print-none bg-white"
     style="height: 64px; margin-top: 0px; transform: translateY(0px); left: 0px; right: 0px; z-index: 20;">
     <div class="container py-1 py-md-2">
       <div style="position: relative;">
@@ -48,11 +48,10 @@
 
 <script setup>
 const { showSearch, toggleSearch } = useSearch();
+const filterStore = useFiltersStore();
 const route = useRoute();
 const propertyContentStore = usePropertyContentStore();
 const slug = route.params.slug;
-const checkin = route.query.checkin || null;
-const checkout = route.query.checkout || null;
 const propertyId = extractPropertyId(slug);
 
 const propertyData = computed(() => propertyContentStore.properties[propertyId] || {});
@@ -64,6 +63,7 @@ const formatDate = (dateString, options = { day: 'numeric', month: 'short', year
 };
 
 const formattedDateRange = computed(() => {
+  const { checkin, checkout } = filterStore;
   if (checkin && checkout) {
     const checkinFormatted = formatDate(checkin, { day: 'numeric' });
     const checkoutFormatted = formatDate(checkout, { day: 'numeric', month: 'short', year: 'numeric' });

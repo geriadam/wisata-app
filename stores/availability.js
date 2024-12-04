@@ -7,9 +7,16 @@ const API_BASE_URL = config.public.apiBase;
 export const useAvailabilityStore = defineStore('availability', {
   state: () => ({
     availability: {},
+    error: null,
+    errorMessages: [],
+    loading: false,
   }),
   actions: {
     async fetchAvailability(id, query) {
+
+      this.loading = true;
+      this.error = null;
+      this.errorMessages = [];
 
       try {
         const { checkin, checkout, guest_per_room, number_of_room } = query
@@ -27,19 +34,27 @@ export const useAvailabilityStore = defineStore('availability', {
         });
 
         if (data.value) {
-          // Save the fetched data in the store
           this.availability = data.value;
           return data.value;
         }
 
         if (fetchError) {
-          console.error('Error fetching property data:', fetchError);
-          throw fetchError;
+          this.handleError(fetchError);
         }
       } catch (error) {
-        console.error('Failed to fetch property data:', error);
-        throw error;
+        this.handleError(error);
+      } finally {
+        this.loading = false;
       }
+    },
+
+    handleError(error) {
+      if (error && error.value.data.detail) {
+        this.errorMessages = [error.value.data.detail];
+      } else {
+        this.errorMessages = ['An unexpected error occurred.'];
+      }
+      this.error = error;
     },
   },
 });

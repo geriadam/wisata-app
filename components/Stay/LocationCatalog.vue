@@ -1,5 +1,5 @@
 <template>
-  <div id="location-catalog" class="pt-0 pt-sm-4 pb-6 pb-sm-8">
+  <div :key="route.fullPath" id="location-catalog" class="pt-0 pt-sm-4 pb-6 pb-sm-8">
     <!-- Catalog Header Mobile-->
     <div v-if="!$device.isDesktop" id="catalog-header-desktop" class="pb-3">
       <div class="align-baseline">
@@ -18,7 +18,8 @@
       <v-col id="hero-image" lg="4" md="1">
         <div class="d-flex justify-center col col-auto">
           <v-avatar class="ma-0" :size="$device.isDesktop ? 168 : 91">
-            <v-img :src="propertyContent?.catalog?.hero_image_url.md" :alt="propertyContent?.name" cover></v-img>
+            <v-img v-if="propertyContent?.catalog?.hero_image_url" :src="propertyContent?.catalog?.hero_image_url.md" :alt="propertyContent?.name" cover></v-img>
+            <v-img v-else src="https://project-exterior-technical-test-app.up.railway.app/img/fallback-property.png" :alt="propertyContent?.name" cover></v-img>
           </v-avatar>
         </div>
       </v-col>
@@ -51,7 +52,7 @@
         <!-- Review Section -->
         <div v-if="propertyContent?.catalog?.review_count" id="review-desktop" aria-hidden="true" class="d-flex align-center py-1 text-body-2">
           <v-progress-circular :size="34" :width="4" :color="ratingColor"
-            :model-value="propertyContent?.catalog?.review_rating">
+            :model-value="reviewRating">
             <span class="font-weight-medium">{{ reviewRating }}</span>
           </v-progress-circular>
           <span class="pl-2">{{ ratingLabel }} ·</span>
@@ -71,17 +72,11 @@ const propertyId = extractPropertyId(slug);
 const propertyContent = computed(() => propertyContentStore.properties[propertyId] || {});
 const reviewRating = ref(0);
 
-watch(
-  () => propertyContent,
-  (newTab) => {
-    if (newTab && newTab.value.catalog.review_rating) {
-      reviewRating.value = newTab.value.catalog.review_rating;
-    }
-
-    return 0;
-  },
-  { immediate: true }
-);
+watchEffect(() => {
+  if (propertyContent && propertyContent.value.catalog && propertyContent.value.catalog.review_rating) {
+    reviewRating.value = propertyContent.value.catalog.review_rating;
+  }
+});
 
 const ratingColor = computed(() => {
   if (reviewRating.value >= 90) {

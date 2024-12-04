@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div key="stayPhotos">
     <v-row :no-gutters="!$device.isDesktop" v-if="propertyData && propertyData.image &&propertyData.image.length > 0">
       <v-col cols="4" v-for="(image, index) in propertyData.image" :key="index">
         <a @click="handleOpenModal">
@@ -12,6 +12,7 @@
           </a>
       </v-col>
     </v-row>
+    <StayEmpty v-if="propertyData && propertyData?.image == null" icon="mdi-image-search-outline" message="No image available for this location" :search="false" />
     <v-dialog max-width="1124" v-model="openModal" v-if="propertyData && propertyData.image && propertyData.image.length > 0">
       <v-carousel hide-delimiters>
           <v-carousel-item
@@ -27,23 +28,29 @@
 </template>
 <script setup>
 
-definePageMeta({
-  middleware: 'fetch-property-content',
-  includes: ['image'],
-});
-
 const route = useRoute();
 const slug = route.params.slug;
 
 const propertyContentStore = usePropertyContentStore();
 const propertyId = extractPropertyId(slug);
-const propertyData = computed(() => propertyContentStore.properties[propertyId] || {});
 
 const openModal = ref(false);
 
 function handleOpenModal() {
   openModal.value = true;
 }
+
+const propertyData = ref(null);
+const fetchAll = async () => {
+  console.log("Fetch all");
+  try {
+    propertyData.value = await propertyContentStore.fetchPropertyContent(propertyId, ['image']);
+  } catch (error) {
+    console.error('Failed to fetch property content:', error);
+  }
+}
+
+watch(() => route.fullPath, fetchAll, { immediate: true });
 
 </script>
 <style scoped>

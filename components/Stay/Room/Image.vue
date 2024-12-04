@@ -1,7 +1,7 @@
 <template>
   <v-sheet border rounded=" lg" class="stay-offer-grid__room-images mx-n4 mx-sm-0">
     <div class="stay-availability-room-images stay-availability-room-images__grid" style="cursor: pointer;">
-      <div class="stay-availability-room-images__main-img bg-grey lighten-4" style="grid-area: main;">
+      <div v-if="newImages[0]" class="stay-availability-room-images__main-img bg-grey lighten-4" style="grid-area: main;">
         <div style="position: relative;">
           <v-sheet class="bg-transparent overflow-hidden aspect-ratio"
             style="height: 0px; max-width: 100%; width: 100%; padding-bottom: 54.5455%; line-height: 0;">
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="bg-grey lighten-4 relative stay-availability-room-images__other-img"
+      <div v-if="newImages[1]" class="bg-grey lighten-4 relative stay-availability-room-images__other-img"
         style="line-height: 0; grid-area: other-1;">
         <div
           class="bg-transparent overflow-hidden stay-availability-room-images__other-img__container v-sheet theme--light aspect-ratio"
@@ -29,7 +29,7 @@
             class="w-full h-full" style="">
         </div>
       </div>
-      <div class="bg-grey lighten-4 relative stay-availability-room-images__other-img"
+      <div v-if="newImages[2]" class="bg-grey lighten-4 relative stay-availability-room-images__other-img"
         style="line-height: 0; grid-area: other-2;">
         <div
           class="bg-transparent overflow-hidden stay-availability-room-images__other-img__container v-sheet theme--light aspect-ratio"
@@ -40,7 +40,7 @@
             class="w-full h-full" style="">
         </div>
       </div>
-      <div class="bg-grey lighten-4 relative stay-availability-room-images__other-img"
+      <div v-if="newImages[3]" class="bg-grey lighten-4 relative stay-availability-room-images__other-img"
         style="line-height: 0; grid-area: other-3;">
         <div
           class="bg-transparent overflow-hidden stay-availability-room-images__other-img__container v-sheet theme--light aspect-ratio"
