@@ -1,10 +1,6 @@
 <script setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-router.push('/stay');
 </script>
 
 <template>
-  <!-- This can be an empty page, since the redirection happens immediately -->
+  <StayEmpty icon="mdi-text-box-search-outline" message="No available room on 6 – 8 Aug 2025" />
 </template>

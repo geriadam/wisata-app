@@ -49,7 +49,7 @@
         </div>
 
         <!-- Review Section -->
-        <div id="review-desktop" aria-hidden="true" class="d-flex align-center py-1 text-body-2">
+        <div v-if="propertyContent?.catalog?.review_count" id="review-desktop" aria-hidden="true" class="d-flex align-center py-1 text-body-2">
           <v-progress-circular :size="34" :width="4" :color="ratingColor"
             :model-value="propertyContent?.catalog?.review_rating">
             <span class="font-weight-medium">{{ reviewRating }}</span>
