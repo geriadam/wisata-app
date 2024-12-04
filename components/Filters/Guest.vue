@@ -84,81 +84,54 @@
   </v-menu>
 </template>
 
-<script>
+<script setup>
+
 const filterStore = useFiltersStore();
-export default {
-  setup() {
-    const menuRoom = ref(false);
-    const guestCount = ref(1);
-    const roomCount = ref(1);
+const menuRoom = ref(false);
+const guestCount = ref(filterStore.guest_per_room || 1);
+const roomCount = ref(filterStore.number_of_room || 1);
 
-    const toggleMenu = (status) => {
-      menuRoom.value = status;
-    };
+const toggleMenu = (status) => {
+  menuRoom.value = status;
+};
 
-    const updateCount = (type, action) => {
-      if (type === "guest") {
-        guestCount.value = adjustValue(guestCount.value, action);
-        filterStore.setFilters({
-          checkin: filterStore.checkin,
-          checkout: filterStore.checkout,
-          guest_per_room: guestCount.value,
-          number_of_room: filterStore.number_of_room,
-          slug: filterStore.slug,
-        });
-      } else if (type === "room") {
-        roomCount.value = adjustValue(roomCount.value, action);
-        filterStore.setFilters({
-          checkin: filterStore.checkin,
-          checkout: filterStore.checkout,
-          guest_per_room: filterStore.guest_per_room,
-          number_of_room: roomCount.value,
-          slug: filterStore.slug,
-        });
-      }
-
-      formattedRoom()
-      guest()
-    };
-
-    const adjustValue = (value, action) => {
-      return action === "increase" ? value + 1 : Math.max(1, value - 1);
-    };
-
-    const formattedRoom = computed(() => {
-      return labelGuest() + ' x ' + roomCount.value;
-    });
-
-    const guest = computed(() => {
-      return labelGuest();
-    });
-
-    const labelGuest = () => {
-      let guestDescription;
-      if (guestCount.value === 1) {
-        guestDescription = "Single Room";
-      } else if (guestCount.value === 2) {
-        guestDescription = "Double Rooms";
-      } else if (guestCount.value === 3) {
-        guestDescription = "Triple Rooms";
-      } else {
-        guestDescription = `Group of ${guestCount.value}`;
-      }
-
-      return guestDescription;
-    }
-
-    return {
-      menuRoom,
-      toggleMenu,
-      updateCount,
-      formattedRoom,
-      guest,
-      guestCount,
-      roomCount,
-    };
+const updateCount = (type, action) => {
+  if (type === 'guest') {
+    guestCount.value = adjustValue(guestCount.value, action);
+    syncFilters();
+  } else if (type === 'room') {
+    roomCount.value = adjustValue(roomCount.value, action);
+    syncFilters();
   }
 };
+
+const adjustValue = (value, action) => {
+  const number = parseInt(value);
+  return action === 'increase' ? number + 1 : Math.max(1, number - 1);
+};
+
+const syncFilters = () => {
+  filterStore.setFilters({
+    checkin: filterStore.checkin,
+    checkout: filterStore.checkout,
+    guest_per_room: guestCount.value,
+    number_of_room: roomCount.value,
+    slug: filterStore.slug,
+  });
+};
+
+const formattedRoom = computed(() => `${labelGuest()} x ${roomCount.value}`);
+const guest = computed(() => labelGuest());
+
+const labelGuest = () => {
+  if (guestCount.value == 1) return 'Single Room';
+  if (guestCount.value == 2) return 'Double Rooms';
+  if (guestCount.value == 3) return 'Triple Rooms';
+  return `Group of ${guestCount.value}`;
+};
+
+watch([guestCount, roomCount], syncFilters);
+
 </script>
 
 <style scoped></style>

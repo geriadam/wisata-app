@@ -86,8 +86,8 @@ export function useLocationSearch() {
 
     try {
       const [locationData, propertyData] = await Promise.all([
-        fetchLocationSuggestions(query),
         fetchPropertySuggestions(query),
+        fetchLocationSuggestions(query),
       ]);
 
       updateSuggestions(locationData, propertyData);

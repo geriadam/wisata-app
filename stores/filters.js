@@ -8,7 +8,7 @@ export const useFiltersStore = defineStore('filters', {
     checkout: route.query.checkout || '',
     guest_per_room: route.query.guest_per_room || 0,
     number_of_room: route.query.number_of_room || 0,
-    slug: '',
+    slug: route.params.slug || '',
   }),
   actions: {
     setFilters({ checkin, checkout, guest_per_room, number_of_room, slug }) {

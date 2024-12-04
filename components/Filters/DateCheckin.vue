@@ -27,93 +27,82 @@
   </v-menu>
 </template>
 
-<script>
-import { ref, computed } from "vue";
-import { format, addDays, eachDayOfInterval } from "date-fns";
+<script setup>
+import { format, addDays, eachDayOfInterval, parseISO } from "date-fns";
+
 
 const filterStore = useFiltersStore();
+const today = new Date();
+const checkin = ref(null);
+const checkout = ref(null);
+const selectedDates = ref([]);
+const menu = ref(false);
+const formattedDate = ref("");
 
-export default {
-  setup() {
-    // Initialize data
-    const today = new Date();
-    const checkin = ref(addDays(today, 2));
-    const checkout = ref(addDays(today, 3));
-    const selectedDates = ref([checkin.value, checkout.value]);
-    const menu = ref(false);
-    const formattedDate = ref(formatDisplay(checkin.value, checkout.value));
+const minDate = ref(today);
 
-    const minDate = ref(today);
-
-    // Handle date selection
-    const handleDateSelect = (dates) => {
-      if (dates.length === 1) {
-        checkin.value = dates[0];
-        checkout.value = addDays(dates[0], 1);
-        selectedDates.value = [checkin.value];
-      } else {
-        checkin.value = dates[0];
-        checkout.value = dates[dates.length - 1];
-        selectedDates.value = eachDayOfInterval({
-          start: checkin.value,
-          end: checkout.value,
-        });
-      }
-
-      formattedDate.value = formatDisplay(checkin.value, checkout.value);
-
-      filterStore.setFilters({
-        checkin: format(checkin.value, "yyyy-MM-dd"),
-        checkout: format(checkout.value, "yyyy-MM-dd"),
-        guest_per_room: filterStore.guest_per_room,
-        number_of_room: filterStore.number_of_room,
-        slug: filterStore.slug,
-      });
-
-      closeMenu();
-    };
-
-    // Format the display string
-    function formatDisplay(checkin, checkout) {
-      const checkinDay = checkin.getDate();
-      const checkoutDay = checkout.getDate();
-      const checkoutMonth = format(checkout, "MMM");
-      const checkoutYear = checkout.getFullYear();
-      return `${checkinDay} - ${checkoutDay} ${checkoutMonth} ${checkoutYear}`;
-    }
-
-    // Handle menu closing logic
-    const closeMenu = () => {
-      if (selectedDates.value.length < 2) {
-        checkout.value = addDays(checkin.value, 1);
-        selectedDates.value = [checkin.value, checkout.value];
-      }
-
-      selectedDates.value = eachDayOfInterval({
-        start: checkin.value,
-        end: checkout.value,
-      });
-
-      menu.value = false;
-    };
-
-    const handleMenuClose = () => {
-      closeMenu();
-    };
-
-    const openMenu = () => {
-      menu.value = true;
-    };
-
-    return {
-      formattedDate,
-      menu,
-      handleDateSelect,
-      minDate,
-      handleMenuClose,
-    };
-  },
+const formatDisplay = (checkin, checkout) => {
+  const checkinDay = checkin.getDate();
+  const checkoutDay = checkout.getDate();
+  const checkoutMonth = format(checkout, "MMM");
+  const checkoutYear = checkout.getFullYear();
+  return `${checkinDay} - ${checkoutDay} ${checkoutMonth} ${checkoutYear}`;
 };
+
+const handleDateSelect = (dates) => {
+  if (dates.length === 1) {
+    checkin.value = dates[0];
+    checkout.value = addDays(dates[0], 1);
+    selectedDates.value = [checkin.value];
+  } else {
+    checkin.value = dates[0];
+    checkout.value = dates[dates.length - 1];
+    selectedDates.value = eachDayOfInterval({
+      start: checkin.value,
+      end: checkout.value,
+    });
+  }
+
+  formattedDate.value = formatDisplay(checkin.value, checkout.value);
+
+  filterStore.setFilters({
+    checkin: format(checkin.value, "yyyy-MM-dd"),
+    checkout: format(checkout.value, "yyyy-MM-dd"),
+    guest_per_room: filterStore.guest_per_room,
+    number_of_room: filterStore.number_of_room,
+    slug: filterStore.slug,
+  });
+
+  closeMenu();
+};
+
+const closeMenu = () => {
+  if (selectedDates.value.length < 2) {
+    checkout.value = addDays(checkin.value, 1);
+    selectedDates.value = [checkin.value, checkout.value];
+  }
+
+  selectedDates.value = eachDayOfInterval({
+    start: checkin.value,
+    end: checkout.value,
+  });
+
+  menu.value = false;
+};
+
+const openMenu = () => {
+  menu.value = true;
+};
+
+onMounted(() => {
+  checkin.value = parseISO(filterStore.checkin || "2025-05-08");
+  checkout.value = parseISO(filterStore.checkout || "2025-05-08");
+  selectedDates.value = eachDayOfInterval({
+    start: checkin.value,
+    end: checkout.value,
+  });
+  formattedDate.value = formatDisplay(checkin.value, checkout.value);
+});
 </script>
 
 <style scoped></style>

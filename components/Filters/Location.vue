@@ -1,12 +1,15 @@
 <template>
   <div style="position: relative;">
-    <v-text-field v-model="searchQuery" label="Where are you going?" variant="outlined" rounded="lg" :focused="true"
-      clearable :color="isFocused ? 'primary' : 'default'" :hide-details="true" @focus="handleFocus" @blur="handleBlur"
-      :error="error" :error-messages="errorMessages" @update:modelValue="onSearch">
+    <v-text-field v-model="searchQuery" label="Where are you going?" variant="outlined" rounded="lg" :focused="isFocused"
+      clearable :color="searchQuery.length > 0 || isFocused ? 'primary' : 'default'" :hide-details="true"
+      :error="error" :error-messages="errorMessages" @focus="onFocus" @blur="onBlur" @update:modelValue="onSearch">
       <template #prepend-inner>
         <v-icon :color="isFocused ? 'primary' : 'default'">mdi-map-marker-outline</v-icon>
       </template>
-      <v-menu v-model="openMenu" height="420px" activator="parent">
+      <template #clear>
+        <v-icon :color="isFocused ? 'primary' : 'default'">mdi-close-circle</v-icon>
+      </template>
+      <v-menu v-model="openMenu" height="420px" :open-on-click="openMenu" target="parent">
         <v-list class="px-2 py-0 pt-2 w-search-autocomplete">
           <div v-if="loading" class="d-flex flex-row align-center justify-center">
             <AppLoader size="40" />
@@ -32,7 +35,7 @@
                   </span>
                 </v-chip>
               </div>
-              <p class="mb-0 text-h7 text-truncate text-none" v-html="item.highlight_data.name"></p>
+              <p class="mb-0 text-h7 text-truncate text-none" v-html="item.name"></p>
               <p class="mb-0 text-caption text--secondary text-truncate" v-html="item.highlight_data.name_suffix">
               </p>
             </div>
@@ -43,88 +46,94 @@
   </div>
 </template>
 
-<script>
-import { computed } from "vue";
+<script setup>
+
 const filterStore = useFiltersStore();
-export default {
-  props: {
-    modelValue: String, // Optional prop for v-model to sync searchQuery
-  },
-  setup(_, { emit }) {
-    const { searchQuery, suggestions, loading, error, errorMessages, fetchSuggestions } =
-      useLocationSearch();
+const route = useRoute();
+const propertyContentStore = usePropertyContentStore();
+const { searchQuery, suggestions, loading, error, errorMessages, fetchSuggestions } =
+  useLocationSearch();
 
-    const localSuggestions = computed(() => {
-      return searchQuery.value && searchQuery.value.length >= 3
-        ? suggestions.value
-        : [];
-    });
+const slug = route.params.slug;
+const openMenu = ref(false);
 
-    const onSearch = (query) => {
-      if (query && query.length >= 3) {
-        fetchSuggestions(query);
-        openMenu.value = true;
-      } else {
-        openMenu.value = false;
-      }
-    };
+const localSuggestions = computed(() => {
+  return searchQuery.value && searchQuery.value.length >= 3
+    ? suggestions.value
+    : [];
+});
 
-    const selectItem = (item) => {
-      searchQuery.value = item.name + ', ' + item.name_suffix;
-      openMenu.value = false;
-      filterStore.setFilters({
-        checkin: filterStore.checkin,
-        checkout: filterStore.checkout,
-        guest_per_room: filterStore.guest_per_room,
-        number_of_room: filterStore.number_of_room,
-        slug: item.slug,
-      });
-    };
+const emptyState = computed(() => {
+  return (
+    !loading.value &&
+    !error.value &&
+    searchQuery.value &&
+    suggestions.value.length === 0
+  );
+});
 
-    const emptyState = computed(() => {
-      return (
-        !loading.value &&
-        !error.value &&
-        searchQuery.value &&
-        suggestions.value.length === 0
-      );
-    });
-
-    const openMenu = ref(false);
-
-    return {
-      searchQuery,
-      localSuggestions,
-      loading,
-      error,
-      errorMessages,
-      onSearch,
-      emptyState,
-      openMenu,
-      selectItem,
-    };
-  },
-  methods: {
-    getChipColor(locationType) {
-      if (locationType === 'hotel') {
-        return 'primary';
-      } else if (locationType === 'area') {
-        return 'success';
-      }
-      return 'success'; // Default color for city
-    },
-    getIcon(locationType) {
-      if (locationType === 'hotel') {
-        return 'mdi-bed-outline';
-      } else if (locationType === 'area') {
-        return 'mdi-map-marker-outline';
-      }
-      return 'mdi-domain'; // Default icon for city
-    },
-    formatLocationType(locationType) {
-      return locationType.replace(/_/g, ' '); // Replace underscores with spaces
-    },
+const propertyId = extractPropertyId(slug);
+const propertyData = computed(() => propertyContentStore.properties[propertyId] || {});
+watchEffect(() => {
+  if (propertyData.value?.name && propertyData.value?.name_suffix) {
+    searchQuery.value = `${propertyData.value.name}, ${propertyData.value.name_suffix}`;
   }
+});
+
+const isFocused = ref(true);
+const onFocus = () => {
+  isFocused.value = true;
+  if (searchQuery.value) {
+    openMenu.value = true;
+    onSearch(searchQuery.value);
+  }
+};
+
+const onBlur = () => {
+  isFocused.value = false;
+};
+
+const onSearch = (query) => {
+  if (query && query.length >= 3) {
+    fetchSuggestions(query.replace(/\s+/g, '+'));
+    openMenu.value = true;
+  } else {
+    openMenu.value = false;
+  }
+};
+
+const selectItem = (item) => {
+  searchQuery.value = `${item.name}, ${item.name_suffix}`;
+  openMenu.value = false;
+  filterStore.setFilters({
+    checkin: filterStore.checkin,
+    checkout: filterStore.checkout,
+    guest_per_room: filterStore.guest_per_room,
+    number_of_room: filterStore.number_of_room,
+    slug: item.slug,
+  });
+};
+
+const getChipColor = (locationType) => {
+  if (locationType === "property") {
+    return "primary";
+  } else if (locationType === "area") {
+    return "success";
+  }
+  return "success";
+};
+
+const getIcon = (locationType) => {
+  if (locationType === "property") {
+    return "mdi-bed-outline";
+  } else if (locationType === "area") {
+    return "mdi-map-marker-outline";
+  }
+  return "mdi-domain";
+};
+
+const formatLocationType = (locationType) => {
+  return locationType.replace(/_/g, " ");
 };
 </script>
 <style scoped>
