@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 
+const route = useRoute();
+
 export const useFiltersStore = defineStore('filters', {
   state: () => ({
-    checkin: '',
-    checkout: '',
-    guest_per_room: 0,
-    number_of_room: 0,
+    checkin: route.query.checkin || '',
+    checkout: route.query.checkout || '',
+    guest_per_room: route.query.guest_per_room || 0,
+    number_of_room: route.query.number_of_room || 0,
     slug: '',
   }),
   actions: {
