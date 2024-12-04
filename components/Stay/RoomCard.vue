@@ -111,6 +111,22 @@
           </div>
           <div class="mt-4">
             <div class="price-display-grid price-display-grid__split">
+              <div class="mt-1 mb-2" style="grid-area: saving-pct;" v-if="offer['xcode_log']['available_rooms'] < 3">
+                <div class="d-inline-flex align-stretch flex-wrap justify-split" style="gap: 4px;">
+                  <v-sheet :rounded="sm" class="px-2 text-h8 bg-red text-white">
+                    <span class="text-button white--text font-weight-medium text-uppercase text-no-wrap">
+                      <span class="text-caption text-md-h8 font-weight-bold" style="font-family: inherit !important;">{{ offer['xcode_log']['promotions']['deal']['description'] }}</span> Today! </span>
+                  </v-sheet>
+                  <v-sheet :rounded="sm" class="px-2 text-h8 bg-red-lighten-4">
+                    <span class="text-button font-weight-medium text-uppercase text-no-wrap text-red-darken-4"> {{ offer['xcode_log']['available_rooms'] }} room left </span>
+                  </v-sheet>
+                </div>
+              </div>
+              <div class="mt-n1" style="grid-area: strikethru;" v-if="offer['pricing_data']['strikethrough_rate_nightly']">
+                <p class="relative d-inline-block mb-0 text-grey-lighten-1 font-weight-medium text-decoration-line-through" style="font-size: .875rem!important;">
+                  Rp {{ rupiahFormat(offer['pricing_data']['strikethrough_rate_nightly']) }}
+                </p>
+              </div>
               <div style="grid-area: rate-nightly;">
                 <p class="d-block mb-0">
                   <span class="text-h8 font-weight-medium">Rp </span>
