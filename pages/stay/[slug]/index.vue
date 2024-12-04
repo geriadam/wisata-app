@@ -1,9 +1,17 @@
 <template>
   <div :key="route.fullPath">
+    <div v-if="propertyContentStore.loading" class="pt-sm-2 px-0 px-md-4 d-flex flex-column flex-sm-row justify-start align-stretch justify-sm-center mb-5">
+      <v-skeleton-loader
+        type="text"
+        :loading="true"
+        width="50%"
+      />
+    </div>
     <div v-if="propertyData && availabilityPropertyData.offer_list.length > 0">
-      <StayFilterRooms />
+      <StayFilterRooms v-if="!propertyContentStore.loading" />
       <StayRoomCard :roomId="index" v-for="(item, index) in propertyData.room" :key="index" :offerLists="availabilityPropertyData?.offer_list" />
     </div>
+    <StayRoomSkeleton v-for="(n, index) in 5" :key="index" v-if="propertyContentStore.loading" />
     <StayEmpty v-if="availabilityPropertyData && availabilityPropertyData.offer_list.length == 0" icon="mdi-text-box-search-outline" :message="emptyMethodData" />
     <StayEmpty v-if="availabilityStore.errorMessages.length > 0" icon="mdi-information-outline" :message="availabilityStore.errorMessages[0]" />
   </div>

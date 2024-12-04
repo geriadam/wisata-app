@@ -1,17 +1,25 @@
 <template>
-  <v-sheet border rounded=" lg" class="stay-offer-grid__room-images mx-n4 mx-sm-0">
+  <v-sheet rounded="lg" class="stay-offer-grid__room-images mx-n4 mx-sm-0">
     <div class="stay-availability-room-images stay-availability-room-images__grid" style="cursor: pointer;">
-      <div v-if="newImages[0]" class="stay-availability-room-images__main-img bg-grey lighten-4" style="grid-area: main;">
+      <div class="stay-availability-room-images__main-img bg-grey lighten-4" style="grid-area: main;">
         <div style="position: relative;">
           <v-sheet class="bg-transparent overflow-hidden aspect-ratio"
             style="height: 0px; max-width: 100%; width: 100%; padding-bottom: 54.5455%; line-height: 0;">
             <img
-              :src="newImages[0]['size_sm']"
+              v-if="newImages[0]"
+              :src="newImages[0]['size_sm'] || 'https://project-exterior-technical-test-app.up.railway.app/img/fallback-room.png'"
               :alt="newImages[0]['caption'] || 'Image'"
+              class="w-full h-full"
+            >
+            <img
+              v-else
+              src="https://project-exterior-technical-test-app.up.railway.app/img/fallback-room.png"
+              alt="Image"
               class="w-full h-full"
             >
           </v-sheet>
           <div
+            v-if="newImages[0]"
             class="v-btn-stay-see-all-room-images d-flex justify-center align-center bg-white elevation-1 ma-4 ma-sm-3 ma-md-4 px-2 py-1">
             <v-icon style="font-size: 16px; height: 16px; width: 16px;">mdi-grid</v-icon>
             <span class="pl-1 text-button text-none font-weight-medium">See Photos</span>
