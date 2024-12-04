@@ -4,34 +4,40 @@ const config = useRuntimeConfig()
 
 const API_BASE_URL = config.public.apiBase;
 
-export const usePropertyContentStore = defineStore('propertyContent', {
+export const useAmenitiesStore = defineStore('amenities', {
   state: () => ({
-    properties: {},
+    amenities: {},
     error: null,
     errorMessages: [],
     loading: false,
   }),
-
   actions: {
-    async fetchPropertyContent(id, includes = []) {
+    async fetchAmenities(amenities, context) {
+
       this.loading = true;
       this.error = null;
       this.errorMessages = [];
 
       try {
-        const params = {
-          id,
-          ...(includes.length > 0 && { include: includes }),
+        const dataBody = {
+          amenities,
+          context,
         };
 
         const { data, error: fetchError } = await useFetch(
-          `${API_BASE_URL}/property/content`,
-          { params }
+          `https://project-exterior-technical-test-app.up.railway.app/amenities`,
+          {
+            method: 'POST',
+            body: JSON.stringify(dataBody),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         );
 
         if (data.value) {
-          this.properties[id] = data.value[id];
-          return data.value[id];
+          this.amenities = data.value;
+          return data.value;
         }
 
         if (fetchError) {

@@ -11,7 +11,7 @@
               {{ filteredOffers[0]['room_name'] }}
             </div>
           </div>
-          <v-btn variant="text" color="primary" class="my-sm-n1 mr-n1 ml-1 ml-sm-0">
+          <v-btn @click="onOpenDetail"  variant="text" color="primary" class="my-sm-n1 mr-n1 ml-1 ml-sm-0">
             <span class="text-h8 text-none font-weight-medium">See details</span>
           </v-btn>
         </div>
@@ -31,7 +31,7 @@
         </div>
         <v-divider class="mx-n4 mt-4 mb-n4 d-none d-lg-block"></v-divider>
       </v-sheet>
-      <StayRoomImage :images="filteredOffers[0]['room_images']" />
+      <StayRoomImage :images="filteredOffers[0]['room_images']" @image-click="onOpenDetail" />
       <v-sheet class="stay-offer-grid__room-offer bg-transparent" :class="{
         'border-thin': $device.isDesktop,
         'border-0': !$device.isDesktop
@@ -175,6 +175,13 @@
         </v-sheet>
       </v-sheet>
     </div>
+    <StayRoomDetail
+      v-if="showDetail"
+      v-model="showDetail"
+      :images="filteredOffers[0]['room_images']"
+      :room-name="filteredOffers[0]['room_name']"
+      :room-bed="filteredOffers[0]['room_bed_groups']"
+    />
   </div>
 </template>
 
@@ -190,6 +197,12 @@ const props = defineProps({
     required: false,
   }
 });
+
+const showDetail = ref(false);
+
+const onOpenDetail = () => {
+  showDetail.value = true;
+}
 
 const filteredOffers = computed(() => {
   if (props.offerLists) {

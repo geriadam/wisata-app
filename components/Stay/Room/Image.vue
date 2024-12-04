@@ -1,13 +1,13 @@
 <template>
   <v-sheet rounded="lg" class="stay-offer-grid__room-images mx-n4 mx-sm-0">
-    <div class="stay-availability-room-images stay-availability-room-images__grid" style="cursor: pointer;">
+    <div class="stay-availability-room-images stay-availability-room-images__grid" style="cursor: pointer;" @click="handleClick">
       <div class="stay-availability-room-images__main-img bg-grey lighten-4" style="grid-area: main;">
         <div style="position: relative;">
           <v-sheet class="bg-transparent overflow-hidden aspect-ratio"
             style="height: 0px; max-width: 100%; width: 100%; padding-bottom: 54.5455%; line-height: 0;">
             <img
               v-if="newImages[0]"
-              :src="newImages[0]['size_sm'] || 'https://project-exterior-technical-test-app.up.railway.app/img/fallback-room.png'"
+              :src="newImages[0]['size_sm']"
               :alt="newImages[0]['caption'] || 'Image'"
               class="w-full h-full"
             >
@@ -73,6 +73,11 @@ const props = defineProps({
 });
 
 const newImages = computed(() => props.images || []);
+
+const emit = defineEmits(['image-click']);
+const handleClick = () => {
+  emit('image-click');
+};
 
 </script>
 <style lang="scss">
