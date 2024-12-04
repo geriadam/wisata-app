@@ -50,11 +50,11 @@
 
         <!-- Review Section -->
         <div id="review-desktop" aria-hidden="true" class="d-flex align-center py-1 text-body-2">
-          <v-progress-circular :size="34" :width="4" color="purple-darken-1"
+          <v-progress-circular :size="34" :width="4" :color="ratingColor"
             :model-value="propertyContent?.catalog?.review_rating">
-            <span class="font-weight-medium">{{ propertyContent?.catalog?.review_rating }}</span>
+            <span class="font-weight-medium">{{ reviewRating }}</span>
           </v-progress-circular>
-          <span class="pl-2">Excellent ·</span>
+          <span class="pl-2">{{ ratingLabel }} ·</span>
           <span> {{ propertyContent?.catalog?.review_count }} reviews</span>
         </div>
       </v-col>
@@ -66,11 +66,51 @@
 const route = useRoute();
 const propertyContentStore = usePropertyContentStore();
 const slug = route.params.slug;
+const propertyId = extractPropertyId(slug);
 
-// Extract ID from slug
-const idMatch = slug.match(/(\d+)$/);
-const id = idMatch ? idMatch[1] : null;
+const propertyContent = computed(() => propertyContentStore.properties[propertyId] || {});
+const reviewRating = ref(0);
 
-const propertyContent = computed(() => propertyContentStore.properties[id] || {});
+watch(
+  () => propertyContent,
+  (newTab) => {
+    if (newTab && newTab.value.catalog.review_rating) {
+      reviewRating.value = newTab.value.catalog.review_rating;
+    }
+
+    return 0;
+  },
+  { immediate: true }
+);
+
+const ratingColor = computed(() => {
+  if (reviewRating.value >= 90) {
+    return 'purple-darken-1';
+  } else if (reviewRating.value >= 80) {
+    return 'green-darken-1';
+  } else if (reviewRating.value >= 70) {
+    return 'green-darken-1';
+  } else if (reviewRating.value >= 60) {
+    return 'orange-lighten-1';
+  } else if (reviewRating.value >= 50) {
+    return 'orange-lighten-1';
+  }
+  return 'red-darken-1'; // For < 50
+});
+
+const ratingLabel = computed(() => {
+  if (reviewRating.value >= 90) {
+    return 'Excellent';
+  } else if (reviewRating.value >= 80) {
+    return 'Very Good';
+  } else if (reviewRating.value >= 70) {
+    return 'Good';
+  } else if (reviewRating.value >= 60) {
+    return 'Fair';
+  } else if (reviewRating.value >= 50) {
+    return 'Average';
+  }
+  return 'Bad';
+});
 </script>
 <style scoped></style>
