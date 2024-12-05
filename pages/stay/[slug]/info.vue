@@ -55,9 +55,9 @@
 
 const route = useRoute();
 const slug = route.params.slug;
-
 const propertyContentStore = usePropertyContentStore();
 const propertyId = extractPropertyId(slug);
+const propertyData = ref(null);
 
 const mergedDescriptions = computed(() => {
   const data = propertyData.value;
@@ -81,15 +81,30 @@ const mergedLanguages = computed(() => {
   return '';
 });
 
-const propertyData = ref(null);
+
 const fetchAll = async () => {
-  console.log("Fetch all");
   try {
-    propertyData.value = await propertyContentStore.fetchPropertyContent(propertyId, ['general_info', 'important_info']);
+    if (
+      !propertyContentStore.properties ||
+      !propertyContentStore.properties.hasOwnProperty(propertyId) ||
+      propertyContentStore.properties[propertyId]?.general_info === null ||
+      propertyContentStore.properties[propertyId]?.important_info === null
+    ) {
+      const properties = await propertyContentStore.fetchPropertyContent(propertyId, ['general_info', 'important_info']);
+      propertyData.value = properties;
+    }
   } catch (error) {
     console.error('Failed to fetch property content:', error);
   }
 }
+
+watch(
+  () => propertyContentStore.properties,
+  (newProperties) => {
+    console.log("newProperties info", newProperties);
+    propertyData.value = newProperties[propertyId]
+  }
+);
 
 watch(() => route.fullPath, fetchAll, { immediate: true });
 

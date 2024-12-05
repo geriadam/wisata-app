@@ -12,6 +12,7 @@
           <v-icon color="grey-darken-3">mdi-close</v-icon>
         </v-btn>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card-text class="pa-0 overflow-hidden">
         <div class="h-100 overflow-hidden stay-offer-sharing-tools__grid">
           <section class="stay-offer-sharing-tools__preview overflow-hidden bg-grey-lighten-4 h-screen">

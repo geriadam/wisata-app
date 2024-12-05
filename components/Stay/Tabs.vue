@@ -72,8 +72,6 @@ const defaultTabs = computed(() => [
 
 const combinedTabs = computed(() => props.tabs.length > 0 ? props.tabs : defaultTabs.value);
 
-console.log(combinedTabs)
-
 function getActiveTabFromRoute() {
   const tabFromRoute = route.query.tab;
   return tabFromRoute && isTabValueValid(tabFromRoute) ? tabFromRoute : 'deals';

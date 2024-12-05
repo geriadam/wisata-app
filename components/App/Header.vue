@@ -24,7 +24,7 @@
                 style="height: 40px; width: 100%; background-color: #f5f5f5;" @click="toggleSearch">
                 <v-icon>mdi-magnify</v-icon>
                 <span v-if="$device.isDesktop" class="text-truncate" style="min-width: 0; min-height: 0;">
-                  {{ propertyData.name }}
+                  {{ propertyData?.name }}
                 </span>
                 <span>&nbsp;&nbsp;·&nbsp;&nbsp; {{ formattedDateRange }}</span>
               </v-btn>
@@ -54,7 +54,16 @@ const propertyContentStore = usePropertyContentStore();
 const slug = route.params.slug;
 const propertyId = extractPropertyId(slug);
 
-const propertyData = computed(() => propertyContentStore.properties[propertyId] || {});
+const propertyData = ref(null);
+watch(
+  () => propertyContentStore.properties,
+  (newProperties) => {
+    if (newProperties) {
+      propertyData.value = newProperties[propertyId];
+    }
+  },
+  { immediate: true }
+);
 
 const formatDate = (dateString, options = { day: 'numeric', month: 'short', year: 'numeric' }) => {
   if (!dateString) return '';

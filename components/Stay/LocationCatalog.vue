@@ -68,15 +68,22 @@ const route = useRoute();
 const propertyContentStore = usePropertyContentStore();
 const slug = route.params.slug;
 const propertyId = extractPropertyId(slug);
-
-const propertyContent = computed(() => propertyContentStore.properties[propertyId] || {});
 const reviewRating = ref(0);
 
-watchEffect(() => {
-  if (propertyContent && propertyContent.value.catalog && propertyContent.value.catalog.review_rating) {
-    reviewRating.value = propertyContent.value.catalog.review_rating;
-  }
-});
+const propertyContent = ref(null);
+watch(
+  () => propertyContentStore.properties,
+  (newProperties) => {
+    if (newProperties) {
+      propertyContent.value = newProperties[propertyId];
+
+      if (newProperties[propertyId]['catalog']) {
+        reviewRating.value = newProperties[propertyId].catalog.review_rating;
+      }
+    }
+  },
+  { immediate: true }
+);
 
 const ratingColor = computed(() => {
   if (reviewRating.value >= 90) {

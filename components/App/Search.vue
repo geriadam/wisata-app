@@ -24,11 +24,18 @@
 
 <script setup>
 
+const { toggleSearch } = useSearch();
 const filterStore = useFiltersStore();
 const router = useRouter();
-const { toggleSearch } = useSearch();
+const propertyContentStore = usePropertyContentStore();
+const availabilityStore = useAvailabilityStore();
 const handleSearch = async () => {
   const { slug, checkin, checkout, guest_per_room, number_of_room } = filterStore;
+  const propertyId = extractPropertyId(slug);
+  const [properties, availability] = await Promise.all([
+    propertyContentStore.fetchPropertyContent(propertyId, ['room']),
+    availabilityStore.fetchAvailability(propertyId, filterStore),
+  ]);
   router.push({
     path: `/stay/${slug}`,
     query: {

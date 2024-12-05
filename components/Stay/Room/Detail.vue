@@ -193,7 +193,6 @@ const amenitiesParams = {};
 const fetchAll = async () => {
   try {
     amenitiesData.value = await amenitiesStore.fetchAmenities(amenitiesParams, 'room');
-    console.log(amenitiesData.value)
   } catch (error) {
     console.error('Failed to fetch property content:', error);
   }

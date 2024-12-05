@@ -6,7 +6,8 @@ const API_BASE_URL = config.public.apiBase;
 
 export const useAvailabilityStore = defineStore('availability', {
   state: () => ({
-    availability: {},
+    availability: null,
+    unfilteredAvailability: null,
     error: null,
     errorMessages: [],
     loading: false,
@@ -35,6 +36,7 @@ export const useAvailabilityStore = defineStore('availability', {
 
         if (data.value) {
           this.availability = data.value;
+          this.unfilteredAvailability = data.value;
           return data.value;
         }
 
@@ -48,8 +50,35 @@ export const useAvailabilityStore = defineStore('availability', {
       }
     },
 
+    fetchFilteredData(filters) {
+      try {
+        const filteredAvailability = this.applyFiltersToAvailability(this.unfilteredAvailability, filters);
+        this.availability = filteredAvailability;
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+
+    applyFiltersToAvailability(availabilityData, filters) {
+      const filteredList = availabilityData.offer_list.filter((property) => {
+        const hasFreeBreakfast = filters['free_breakfast'] ? property.meal_plan_description : true;
+        const hasFreeCancellation = filters['free_cancellation'] ? property.cancel_policy_code === 'FC' : true;
+        return hasFreeBreakfast && hasFreeCancellation;
+      });
+
+      return {
+        ...availabilityData,
+        offer_list: filteredList,
+      };
+    },
+
+    resetFilters() {
+      this.availability = this.unfilteredAvailability;
+      console.log('Resetting availability', this.availability);
+    },
+
     handleError(error) {
-      if (error && error.value.data.detail) {
+      if (error && error.value && error.value.data && error.value.data.detail) {
         this.errorMessages = [error.value.data.detail];
       } else {
         this.errorMessages = ['An unexpected error occurred.'];

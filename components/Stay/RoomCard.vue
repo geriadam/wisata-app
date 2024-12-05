@@ -218,7 +218,6 @@ const onOpenOffer = (offer, tab) => {
   selectedShareTab.value = tab;
   showOffer.value = true;
 }
-
 const filteredOffers = computed(() => {
   if (props.offerLists) {
     return props.offerLists

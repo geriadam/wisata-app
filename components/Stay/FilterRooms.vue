@@ -42,63 +42,78 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    filters: {
-      type: Array,
-      required: true,
-      default: () => [
-        {
-          label: "Free Breakfast",
-          icon: "mdi-silverware-variant",
-          value: "free-breakfast",
-        },
-        {
-          label: "Free Cancellation",
-          icon: "mdi-credit-card-check-outline",
-          value: "free-cancellation",
-        },
-      ],
-    },
-  },
-  data() {
-    return {
-      selectedFilters: [], // List of currently selected filters
-    };
-  },
-  computed: {
-    hasSelectedFilters() {
-      return this.selectedFilters.length > 0;
-    },
-  },
-  methods: {
-    toggleFilter(filterValue) {
-      const filterIndex = this.selectedFilters.indexOf(filterValue);
-      if (filterIndex === -1) {
-        this.addFilter(filterValue);
-      } else {
-        this.removeFilter(filterValue);
-      }
-    },
+<script setup>
 
-    addFilter(filterValue) {
-      this.selectedFilters.push(filterValue);
-    },
-
-    removeFilter(filterValue) {
-      this.selectedFilters = this.selectedFilters.filter((value) => value !== filterValue);
-    },
-
-    clearAllFilters() {
-      this.selectedFilters = [];
-    },
-
-    isFilterSelected(filterValue) {
-      return this.selectedFilters.includes(filterValue);
-    },
+const filters = ref([
+  {
+    label: "Free Breakfast",
+    icon: "mdi-silverware-variant",
+    value: "free_breakfast",
   },
+  {
+    label: "Free Cancellation",
+    icon: "mdi-credit-card-check-outline",
+    value: "free_cancellation",
+  },
+]);
+
+const selectedFilters = ref([]); // Selected filters for the component
+const router = useRouter();
+const route = useRoute();
+const availabilityStore = useAvailabilityStore();
+
+const hasSelectedFilters = computed(() => selectedFilters.value.length > 0);
+
+const toggleFilter = (filterValue) => {
+  const filterIndex = selectedFilters.value.indexOf(filterValue);
+  if (filterIndex === -1) {
+    selectedFilters.value.push(filterValue);
+  } else {
+    selectedFilters.value = selectedFilters.value.filter(value => value !== filterValue);
+  }
+  updateFilters()
+  updateQueryParams()
 };
+
+const clearAllFilters = () => {
+  selectedFilters.value = [];
+  availabilityStore.resetFilters();
+  const params = { ...route.query };
+  filters.value.forEach((filter) => {
+    delete params[filter.value];
+  });
+
+  router.push({ query: params });
+};
+
+const isFilterSelected = (filterValue) => selectedFilters.value.includes(filterValue);
+
+// Update URL query parameters
+const updateQueryParams = () => {
+  const params = { ...route.query };
+
+  filters.value.forEach((filter) => {
+    params[filter.value] = selectedFilters.value.includes(filter.value) ? 'true' : undefined;
+  });
+
+  router.push({ query: params });
+};
+
+const updateFilters = async () => {
+  const queryParams = selectedFilters.value.reduce((acc, filter) => {
+    acc[filter] = true;
+    return acc;
+  }, {});
+  availabilityStore.fetchFilteredData(queryParams);
+}
+
+onMounted(() => {
+  const initialFilters = Object.keys(route.query).filter((key) => {
+    return filters.value.some((filter) => filter.value === key && route.query[key] === 'true');
+  });
+  selectedFilters.value = initialFilters;
+});
+
 </script>
 
 <style scoped>

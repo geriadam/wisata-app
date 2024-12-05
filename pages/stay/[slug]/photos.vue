@@ -33,22 +33,35 @@ const slug = route.params.slug;
 
 const propertyContentStore = usePropertyContentStore();
 const propertyId = extractPropertyId(slug);
-
 const openModal = ref(false);
+const propertyData = ref(null);
 
 function handleOpenModal() {
   openModal.value = true;
 }
 
-const propertyData = ref(null);
 const fetchAll = async () => {
-  console.log("Fetch all");
   try {
-    propertyData.value = await propertyContentStore.fetchPropertyContent(propertyId, ['image']);
+    if (
+      !propertyContentStore.properties ||
+      !propertyContentStore.properties.hasOwnProperty(propertyId) ||
+      propertyContentStore.properties[propertyId]?.image === null
+    ) {
+      const properties = await propertyContentStore.fetchPropertyContent(propertyId, ['image']);
+      propertyData.value = properties;
+    }
   } catch (error) {
     console.error('Failed to fetch property content:', error);
   }
 }
+
+watch(
+  () => propertyContentStore.properties,
+  (newProperties) => {
+    console.log("newProperties info", newProperties);
+    propertyData.value = newProperties[propertyId]
+  }
+);
 
 watch(() => route.fullPath, fetchAll, { immediate: true });
 
