@@ -66,13 +66,13 @@
             <div class="d-flex justify-end">
               <div class="d-inline-block my-n1">
                 <div class="d-flex flex-row flex-nowrap align-center" style="gap: 4px">
-                  <v-btn variant="text" icon size="x-small" style="height: 32px; width: 32px;">
+                  <v-btn @click="onOpenOffer(offer, 'text')" variant="text" icon size="x-small" style="height: 32px; width: 32px;">
                     <v-icon color="grey-darken-2" style="font-size: 20px; height: 20px; width: 20px;">
                       mdi-content-copy
                     </v-icon>
                     <v-tooltip activator="parent" location="top">Copy offer</v-tooltip>
                   </v-btn>
-                  <v-btn variant="text" icon size="x-small" style="height: 32px; width: 32px;">
+                  <v-btn @click="onOpenOffer(offer, 'image')" variant="text" icon size="x-small" style="height: 32px; width: 32px;">
                     <v-icon color="grey-darken-2" style="font-size: 22px; height: 22px; width: 22px;">
                       mdi-fullscreen
                     </v-icon>
@@ -86,7 +86,7 @@
                     <v-menu activator="parent">
                       <v-list>
                         <v-list-subheader>Actions</v-list-subheader>
-                        <v-list-item>
+                        <v-list-item @click="onOpenOffer(offer, 'text')">
                           <v-list-item-title class="py-2 text-h8">
                             <v-icon color="grey-darken-2"
                               style="font-size: 18px; height: 18px; width: 18px; margin-right: 5px;">
@@ -94,7 +94,7 @@
                             </v-icon>Copy Offer
                           </v-list-item-title>
                         </v-list-item>
-                        <v-list-item>
+                        <v-list-item @click="onOpenOffer(offer, 'image')">
                           <v-list-item-title class="py-2 text-h8">
                             <v-icon color="grey-darken-2"
                               style="font-size: 18px; height: 18px; width: 18px; margin-right: 5px">
@@ -182,6 +182,13 @@
       :room-name="filteredOffers[0]['room_name']"
       :room-bed="filteredOffers[0]['room_bed_groups']"
     />
+    <StayRoomShare
+      v-if="showOffer && selectedOffer"
+      :key="selectedOffer.offer_id || 0"
+      v-model="showOffer"
+      :offer="selectedOffer"
+      :default-active-tab="selectedShareTab"
+    />
   </div>
 </template>
 
@@ -199,9 +206,17 @@ const props = defineProps({
 });
 
 const showDetail = ref(false);
-
 const onOpenDetail = () => {
   showDetail.value = true;
+}
+
+const selectedOffer = ref(null);
+const showOffer = ref(false);
+const selectedShareTab = ref('text');
+const onOpenOffer = (offer, tab) => {
+  selectedOffer.value = offer;
+  selectedShareTab.value = tab;
+  showOffer.value = true;
 }
 
 const filteredOffers = computed(() => {
