@@ -1,5 +1,5 @@
 <template>
-  <div key="stayInfo">
+  <NuxtLayout key="stayInfo" name="stay">
     <div v-if="propertyData?.important_info && propertyData?.general_info">
       <section v-if="propertyData.important_info">
         <h3 class="text-sm-h5 font-weight-medium mb-0">About the property</h3>
@@ -49,7 +49,7 @@
       </section>
     </div>
     <StayEmpty v-if="!propertyData?.important_info && !propertyData?.general_info" icon="mdi-information-outline" message="No info available for this location" :search="false" />
-  </div>
+  </NuxtLayout>
 </template>
 <script setup>
 

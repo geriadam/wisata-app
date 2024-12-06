@@ -1,5 +1,5 @@
 <template>
-  <div key="stayPhotos">
+  <NuxtLayout key="stayPhotos" name="stay">
     <v-row :no-gutters="!$device.isDesktop" v-if="propertyData && propertyData.image &&propertyData.image.length > 0">
       <v-col cols="4" v-for="(image, index) in propertyData.image" :key="index">
         <a @click="handleOpenModal">
@@ -24,7 +24,7 @@
           ></v-carousel-item>
         </v-carousel>
     </v-dialog>
-  </div>
+  </NuxtLayout>
 </template>
 <script setup>
 

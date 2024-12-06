@@ -1,5 +1,5 @@
 <template>
-  <div key="stayIndex">
+  <NuxtLayout key="stayIndex" name="stay">
     <div v-if="availabilityStore.loading" class="pt-sm-2 px-0 px-md-4 d-flex flex-column flex-sm-row justify-start align-stretch justify-sm-center mb-5">
       <v-skeleton-loader
         type="text"
@@ -8,15 +8,15 @@
       />
     </div>
     <StayRoomSkeleton v-for="(n, index) in 5" :key="index" v-if="propertyContentStore.loading" />
-  </div>
-  <div>
-    <div v-if="propertyData && availabilityPropertyData && availabilityPropertyData.offer_list && availabilityPropertyData.offer_list.length > 0">
-      <StayFilterRooms v-if="!availabilityStore.loading" />
-      <StayRoomCard :roomId="index" v-for="(item, index) in propertyData.room" :key="index" :offerLists="availabilityPropertyData?.offer_list" />
+    <div>
+      <div v-if="propertyData && availabilityPropertyData && availabilityPropertyData.offer_list && availabilityPropertyData.offer_list.length > 0">
+        <StayFilterRooms v-if="!availabilityStore.loading" />
+        <StayRoomCard :roomId="index" v-for="(item, index) in propertyData.room" :key="index" :offerLists="availabilityPropertyData?.offer_list" />
+      </div>
+      <StayEmpty v-if="availabilityPropertyData && availabilityPropertyData.offer_list && availabilityPropertyData.offer_list.length == 0" icon="mdi-text-box-search-outline" :message="emptyMethodData" />
+      <StayEmpty v-if="availabilityPropertyData &&  availabilityStore.errorMessages.length > 0" icon="mdi-information-outline" :message="availabilityStore.errorMessages[0]" />
     </div>
-    <StayEmpty v-if="availabilityPropertyData && availabilityPropertyData.offer_list && availabilityPropertyData.offer_list.length == 0" icon="mdi-text-box-search-outline" :message="emptyMethodData" />
-    <StayEmpty v-if="availabilityPropertyData &&  availabilityStore.errorMessages.length > 0" icon="mdi-information-outline" :message="availabilityStore.errorMessages[0]" />
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup>
@@ -92,6 +92,7 @@ watch(
   (newProperties) => {
     if (newProperties) {
       propertyData.value = newProperties[propertyId]
+      useMeta(newProperties[propertyId])
     }
   },
   { immediate: true }
