@@ -1,75 +1,62 @@
-# Nuxt Minimal Starter
+# Wisata APP (Nuxt3 + Vuetify3 + Pinia)
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Stacks
 
-## Setup
+```
+- vue3
+- nuxt3
+- vuetify3
+- pinia
+- nuxt-viewport
+```
 
-Make sure to install dependencies:
+The API used on this project can be found <a href="https://wisata-app-beta.vercel.app/" target="_blank">Here</a>
 
-```bash
+## Application Snapshots
+
+<img width="1599" alt="image" src="https://github.com/user-attachments/assets/de7c39ff-784b-4b37-8227-fd2e3d1fd9c1">
+<img width="1674" alt="image" src="https://github.com/user-attachments/assets/b8181d1a-8dc7-4d00-98b6-e34a60ada416">
+<img width="1667" alt="image" src="https://github.com/user-attachments/assets/894fd647-83d8-44ad-a788-9d9a2429ce2f">
+<img width="956" alt="image" src="https://github.com/user-attachments/assets/df2479e3-4f74-45ae-bcd3-190aeff0be4a">
+
+<img width="947" alt="image" src="https://github.com/user-attachments/assets/4be6c742-222e-4fbe-9769-2c03576d8aa4">
+<img width="817" alt="image" src="https://github.com/user-attachments/assets/3979888b-9adb-4fbb-ad02-de2f21ef72e1">
+
+## Project setup
+
+```
+# yarn
+yarn
+
 # npm
 npm install
 
 # pnpm
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+### Compiles and hot-reloads for development
 
-Start the development server on `http://localhost:3000`:
+```
+# yarn
+yarn dev
 
-```bash
 # npm
 npm run dev
 
 # pnpm
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+### Compiles and minifies for production
 
-Build the application for production:
+```
+# yarn
+yarn build
 
-```bash
 # npm
 npm run build
 
 # pnpm
 pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
