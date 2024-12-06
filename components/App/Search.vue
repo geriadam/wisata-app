@@ -1,6 +1,6 @@
 <template>
   <v-sheet class="searchnav-wrapper mx-n4 mx-sm-0 px-4 px-md-6 pt-2 rounded-b-lg bg-white" elevation="1">
-    <div class="flex-lg-row flex-md-column flex-sm-column d-sm-column d-md-column d-lg-row flex-md-nowrap py-4 justify-start">
+    <div class="d-sm-column flex-sm-column d-lg-flex flex-lg-row flex-md-nowrap py-4 justify-start">
       <v-col md="12" sm="12" class="autocomplete-filter flex-md-grow-1 mb-4 mb-lg-0 col-md-auto pa-1">
         <FiltersLocation />
       </v-col>
