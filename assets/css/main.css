@@ -95,3 +95,14 @@ header .container {
 .v-window__container {
   width: 100%;
 }
+
+.bg-splash {
+  background-image: url('/assets/img/star-bg-wb.5584974.svg');
+  background-position: top;
+  background-repeat: repeat-x;
+}
+@media screen and (max-width: 600px) {
+  .bg-splash {
+    background-image: none;
+  }
+}

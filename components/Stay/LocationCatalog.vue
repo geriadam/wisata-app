@@ -15,7 +15,7 @@
 
     <div class="d-flex" style="margin: 0;">
       <!-- Hero Image Section -->
-      <v-col id="hero-image" lg="4" md="4" sm="1" :class="!isDesktop ? 'col-auto' : 'd-flex justify-center'">
+      <v-col id="hero-image" lg="4" md="4" sm="1" class="p-sm-0" :class="!isDesktop ? 'col-auto' : 'd-flex justify-center'">
         <v-avatar class="ma-0" :size="isDesktop ? 168 : 91">
           <v-img v-if="propertyContent?.catalog?.hero_image_url" :src="propertyContent?.catalog?.hero_image_url.md" :alt="propertyContent?.name" cover></v-img>
           <v-img v-else src="https://project-exterior-technical-test-app.up.railway.app/img/fallback-property.png" :alt="propertyContent?.name" cover></v-img>
