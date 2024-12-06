@@ -9,12 +9,12 @@
         </p>
       </div>
 
-      <div class="d-flex flex-row align-center gc-2" :style="!$device.isDesktop ? 'width: 100%; max-width: 100%;' : ''">
+      <div class="d-flex flex-row align-center gc-2" :style="!isDesktop ? 'width: 100%; max-width: 100%;' : ''">
         <!-- Clear All Button -->
         <div class="relative w-full d-flex align-center justify-center gc-2"
-          :style="!$device.isDesktop ? 'overflow-x: scroll; scrollbar-width: thin;' : ''">
+          :style="!isDesktop ? 'overflow-x: scroll; scrollbar-width: thin;' : ''">
           <v-chip v-if="hasSelectedFilters" color="primary" variant="outlined" :closable="false"
-            @click="clearAllFilters" :style="!$device.isDesktop ? 'width: 210px;' : ''">
+            @click="clearAllFilters" :style="!isDesktop ? 'width: 210px;' : ''">
             <template #append>
               <span class="font-weight-regular">Clear Filters</span>
               <div class="ml-2 mr-n1 d-flex justify-center align-center text-white rounded-circle v-sheet bg-primary"
@@ -24,7 +24,7 @@
             </template>
           </v-chip>
 
-          <div class="d-flex" :style="!$device.isDesktop ? 'overflow-x: scroll; scrollbar-width: thin;' : ''">
+          <div class="d-flex" :style="!isDesktop ? 'overflow-x: scroll; scrollbar-width: thin;' : ''">
             <div class="d-flex gc-2">
               <v-chip v-for="(filter, index) in filters" :key="index" variant="outlined"
                 :color="isFilterSelected(filter.value) ? 'primary' : ''" @click="toggleFilter(filter.value)">
@@ -37,13 +37,11 @@
         </div>
       </div>
     </div>
-    <v-sheet class="gutters-0 d-lg-none mt-4 rounded-0 bg-grey-lighten-4" height="24"
-      style="margin-left: -16px !important; margin-right: -16px !important; max-width: none !important; width: auto !important;"></v-sheet>
   </div>
 </template>
 
 <script setup>
-
+const { isMobile, isDesktop } = useViewportState();
 const filters = ref([
   {
     label: "Free Breakfast",

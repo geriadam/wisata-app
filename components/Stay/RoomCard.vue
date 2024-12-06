@@ -2,8 +2,8 @@
   <div v-if="filteredOffers[0]" class="bg-transparent mb-sm-8 mb-md-10">
     <div class="stay-offer-grid">
       <v-sheet class="stay-offer-grid__room-catalog gutters-0 gutters-sm-1 pa-4" :class="{
-        'border-thin': $device.isDesktop,
-        'border-0': !$device.isDesktop
+        'border-thin': isDesktop,
+        'border-0': !isDesktop
       }">
         <div class="d-flex justify-space-between align-sm-center">
           <div class="d-flex flex-nowrap align-start">
@@ -33,8 +33,8 @@
       </v-sheet>
       <StayRoomImage :images="filteredOffers[0]['room_images']" @image-click="onOpenDetail" />
       <v-sheet class="stay-offer-grid__room-offer bg-transparent" :class="{
-        'border-thin': $device.isDesktop,
-        'border-0': !$device.isDesktop
+        'border-thin': isDesktop,
+        'border-0': !isDesktop
       }">
         <v-sheet v-for="(offer, index) in filteredOffers" :key="index" class="py-4 pa-sm-4 bg-transparent">
           <v-divider v-if="index !== 0" class="mx-n4 mt-n4 mb-4"></v-divider>
@@ -193,7 +193,7 @@
 </template>
 
 <script setup>
-
+const { isDesktop } = useViewportState();
 const props = defineProps({
   roomId: {
     type: String,

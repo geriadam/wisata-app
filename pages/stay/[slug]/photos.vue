@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout key="stayPhotos" name="stay">
-    <v-row :no-gutters="!$device.isDesktop" v-if="propertyData && propertyData.image &&propertyData.image.length > 0">
+    <v-row :no-gutters="!isDesktop" v-if="propertyData && propertyData.image &&propertyData.image.length > 0">
       <v-col cols="4" v-for="(image, index) in propertyData.image" :key="index">
         <a @click="handleOpenModal">
           <v-sheet rounded="0" elevation="0">
@@ -27,7 +27,7 @@
   </NuxtLayout>
 </template>
 <script setup>
-
+const { isDesktop } = useViewportState();
 const route = useRoute();
 const slug = route.params.slug;
 

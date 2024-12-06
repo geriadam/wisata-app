@@ -1,8 +1,8 @@
 <template>
-  <v-dialog v-model="openDetail" :open-on-click="openDetail" max-width="900px" scrollable :fullscreen="!$device.isDesktop">
+  <v-dialog v-model="openDetail" :open-on-click="openDetail" max-width="900px" scrollable :fullscreen="!isDesktop">
     <v-card rounded="lg" elevation="3" max-height="800px">
       <v-card-text class="pa-0">
-        <div class="room-details-grid" :class="$device.isDesktop ? 'room-details-grid--horizontal' : 'room-details-grid--vertical'">
+        <div class="room-details-grid" :class="isDesktop ? 'room-details-grid--horizontal' : 'room-details-grid--vertical'">
           <!-- Carousel Section -->
           <section class="bg-grey-darken-4 d-flex align-center h-full mt-n2 mt-md-0 black" style="grid-area: carousel; position: relative">
             <v-carousel v-model="carousel" hide-delimiters style="height: auto;">
@@ -51,11 +51,11 @@
           <!-- Title Section -->
 
           <div class="pa-3 px-sm-6 py-sm-3 d-flex border-b-thin align-center justify-center justify-md-start bg-white" style="grid-area: title; position: sticky; top: 0px; z-index: 5;">
-            <v-btn v-if="!$device.isDesktop" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="left: 0; position: absolute;">
+            <v-btn v-if="!isDesktop" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="left: 0; position: absolute;">
               <v-icon size="30" color="primary">mdi-chevron-left</v-icon>
             </v-btn>
             <span class="text-h6 font-weight-medium">Room Details</span>
-            <v-btn v-if="$device.isDesktop" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="right: 0; position: absolute;">
+            <v-btn v-if="isDesktop" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="right: 0; position: absolute;">
               <v-icon color="primary">mdi-close</v-icon>
             </v-btn>
           </div>
@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-
+const { isDesktop } = useViewportState();
 const props = defineProps({
   images: {
     type: Array,

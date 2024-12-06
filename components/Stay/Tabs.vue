@@ -5,7 +5,7 @@
         <div class="pl-2"></div>
         <v-tab :value="tab.value" variant="text" class="tab-no-background pb-2 pt-2" color="primary" :to="tab.route">
           <v-icon :style="iconStyle">{{ tab.icon }}</v-icon>
-          <span v-if="$device.isDesktop" class="text-button font-weight-medium">
+          <span class="text-button font-weight-medium" :class="isDesktop ? 'd-flex' : 'd-none'">
             {{ tab.label }}
           </span>
         </v-tab>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-
+const { isMobile, isDesktop } = useViewportState();
 // Props
 const props = defineProps({
   tabs: {

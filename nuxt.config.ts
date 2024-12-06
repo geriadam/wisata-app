@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  modules: ['@nuxt/eslint', '@nuxtjs/device', '@pinia/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxtjs/device', '@pinia/nuxt', 'nuxt-viewport'],
   app: {
     baseURL: '/',
     head: {

@@ -91,3 +91,7 @@ header .container {
   font-size: .75rem !important;
   line-height: 1.2rem;
 }
+
+.v-window__container {
+  width: 100%;
+}

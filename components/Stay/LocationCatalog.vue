@@ -1,7 +1,7 @@
 <template>
   <div :key="route.fullPath" id="location-catalog" class="pt-0 pt-sm-4 pb-6 pb-sm-8">
     <!-- Catalog Header Mobile-->
-    <div v-if="!$device.isDesktop" id="catalog-header-desktop" class="pb-3">
+    <div v-if="!isDesktop" id="catalog-header-desktop" class="pb-3">
       <div class="align-baseline">
         <h1 class="d-inline-block font-weight-medium pr-1 text-h6">
           {{ propertyContent?.name }}
@@ -13,21 +13,19 @@
       </div>
     </div>
 
-    <v-row no-gutters>
+    <div class="d-flex" style="margin: 0;">
       <!-- Hero Image Section -->
-      <v-col id="hero-image" lg="4" md="1">
-        <div class="d-flex justify-center col col-auto">
-          <v-avatar class="ma-0" :size="$device.isDesktop ? 168 : 91">
-            <v-img v-if="propertyContent?.catalog?.hero_image_url" :src="propertyContent?.catalog?.hero_image_url.md" :alt="propertyContent?.name" cover></v-img>
-            <v-img v-else src="https://project-exterior-technical-test-app.up.railway.app/img/fallback-property.png" :alt="propertyContent?.name" cover></v-img>
-          </v-avatar>
-        </div>
+      <v-col id="hero-image" lg="4" md="4" sm="1" :class="!isDesktop ? 'col-auto' : 'd-flex justify-center'">
+        <v-avatar class="ma-0" :size="isDesktop ? 168 : 91">
+          <v-img v-if="propertyContent?.catalog?.hero_image_url" :src="propertyContent?.catalog?.hero_image_url.md" :alt="propertyContent?.name" cover></v-img>
+          <v-img v-else src="https://project-exterior-technical-test-app.up.railway.app/img/fallback-property.png" :alt="propertyContent?.name" cover></v-img>
+        </v-avatar>
       </v-col>
 
       <!-- Catalog Data Section -->
-      <v-col id="catalog-data" lg="8" class="ml-n2 ml-sm-0">
+      <v-col id="catalog-data" lg="8" md="8" sm="11" class="ml-n2 ml-sm-0">
         <!-- Catalog Header Dekstop-->
-        <div v-if="$device.isDesktop" id="catalog-header-desktop">
+        <div v-if="isDesktop" id="catalog-header-desktop">
           <div class="align-baseline">
             <h1 class="d-inline-block font-weight-medium pr-1 text-h6">
               {{ propertyContent?.name }}
@@ -59,11 +57,12 @@
           <span> {{ propertyContent?.catalog?.review_count }} reviews</span>
         </div>
       </v-col>
-    </v-row>
+    </div>
   </div>
 </template>
 
 <script setup>
+const { isDesktop } = useViewportState();
 const route = useRoute();
 const propertyContentStore = usePropertyContentStore();
 const slug = route.params.slug;
@@ -115,4 +114,10 @@ const ratingLabel = computed(() => {
   return 'Bad';
 });
 </script>
-<style scoped></style>
+<style scoped>
+.col-auto {
+  flex: 0 0 auto;
+  max-width: 100%;
+  width: auto;
+}
+</style>

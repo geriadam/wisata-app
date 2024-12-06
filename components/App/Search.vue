@@ -1,23 +1,23 @@
 <template>
   <v-sheet class="searchnav-wrapper mx-n4 mx-sm-0 px-4 px-md-6 pt-2 rounded-b-lg bg-white" elevation="1">
-    <div class="d-sm-column flex-sm-column d-lg-flex flex-lg-row flex-md-nowrap py-4 row--dense justify-start">
-      <div class="autocomplete-filter flex-md-grow-1 mb-4 mb-lg-0 col-sm-12 col-md-auto col-12 pr-2">
+    <div class="flex-lg-row flex-md-column flex-sm-column d-sm-column d-md-column d-lg-row flex-md-nowrap py-4 justify-start">
+      <v-col md="12" sm="12" class="autocomplete-filter flex-md-grow-1 mb-4 mb-lg-0 col-md-auto pa-1">
         <FiltersLocation />
-      </div>
-      <div class="date-filter flex-shrink-1 mb-4 mb-lg-0 col-sm-6 col-md-auto col-12 pr-2">
+      </v-col>
+      <v-col md="12" sm="12" class="date-filter flex-shrink-1 mb-4 mb-lg-0 col-md-auto pa-1">
         <FiltersDateCheckin />
-      </div>
-      <div class="date-filter flex-shrink-1 mb-4 mb-lg-0 col-sm-6 col-md-auto col-12 pr-2">
+      </v-col>
+      <v-col md="12" sm="12" class="date-filter flex-shrink-1 mb-4 mb-lg-0 col-md-auto pa-1">
         <FiltersGuest />
-      </div>
-      <div class="col-sm-12 col-md-auto col-12 pr-2">
-        <v-btn block height="100%" rounded="lg" variant="flat" color="primary" @click="handleSearch">
+      </v-col>
+      <v-col md="12" sm="12" class="col-md-auto pa-1">
+        <v-btn block height="100%" rounded="lg" size="large" variant="flat" color="primary" @click="handleSearch" style="height: 56px;">
           <template #prepend>
-            <v-icon style="font-size: 20px; height: 20px; width: 20px;">mdi-magnify</v-icon>
+            <v-icon size="20">mdi-magnify</v-icon>
           </template>
           <span class="text-none text-subtitle-1 font-weight-medium">Search</span>
         </v-btn>
-      </div>
+      </v-col>
     </div>
   </v-sheet>
 </template>
@@ -48,4 +48,12 @@ const handleSearch = async () => {
   toggleSearch()
 };
 </script>
-<style scoped></style>
+<style scoped>
+@media (min-width: 800px) {
+  .col-md-auto {
+    flex: 0 0 auto;
+    max-width: 100%;
+    width: auto;
+  }
+}
+</style>

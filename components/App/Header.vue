@@ -5,14 +5,14 @@
       <div style="position: relative;">
         <div class="appbartop-grid">
           <!-- Brand Logo -->
-          <NuxtLink v-if="$device.isDesktop" to="/" class="d-inline-block align-self-center brand-logo"
+          <NuxtLink v-if="isDesktop" to="/" class="d-inline-block align-self-center brand-logo"
             style="line-height: 0;">
             <div class="d-inline-block" style="line-height: 0; margin: 0px 0px 0px -6px;">
               <img src="/assets/img/logo-wisata-app.png" alt="app-logo" width="185" height="42" />
             </div>
           </NuxtLink>
 
-          <v-btn v-else variant="text" @click="toggleSearch" min-width="48px" max-width="48px" max-height="48px"
+          <v-btn v-if="isMobile" variant="text" @click="toggleSearch" min-width="48px" max-width="48px" max-height="48px"
             style="height: 48px; width: 48px; padding: 0;">
             <v-icon color="primary" style="font-size: 36px; height: 36px; width: 36px;">mdi-chevron-left</v-icon>
           </v-btn>
@@ -23,7 +23,7 @@
               <v-btn class="appsearchbar-btn text-body-2 font-weight-medium" block
                 style="height: 40px; width: 100%; background-color: #f5f5f5;" @click="toggleSearch">
                 <v-icon>mdi-magnify</v-icon>
-                <span v-if="$device.isDesktop" class="text-truncate" style="min-width: 0; min-height: 0;">
+                <span v-if="isDesktop" class="text-truncate" style="min-width: 0; min-height: 0;">
                   {{ propertyData?.name }}
                 </span>
                 <span>&nbsp;&nbsp;·&nbsp;&nbsp; {{ formattedDateRange }}</span>
@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+const { isMobile, isDesktop } = useViewportState();
 const { showSearch, toggleSearch } = useSearch();
 const filterStore = useFiltersStore();
 const route = useRoute();

@@ -10,9 +10,9 @@
           <StayLocationCatalog :key="route.fullPath" />
           <div id="tabs-row-desktop" class="align-center justify-space-between mb-6">
             <div class="col col-12">
-              <v-divider v-if="$device.isDesktop" class="mb-n1"></v-divider>
+              <v-divider v-if="isDesktop" class="mb-n1"></v-divider>
               <StayTabs :tabs="tabs" :key="route.fullPath"  />
-              <v-divider v-if="!$device.isDesktop" class="mb-n1"></v-divider>
+              <v-divider v-if="!isDesktop" class="mb-n1"></v-divider>
             </div>
           </div>
           <slot />
@@ -23,7 +23,7 @@
   </div>
 </template>
 <script setup>
-
+const { isDesktop } = useViewportState();
 const { showSearch } = useSearch();
 const route = useRoute();
 const filterStore = useFiltersStore();

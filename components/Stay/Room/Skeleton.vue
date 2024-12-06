@@ -3,8 +3,8 @@
     <div class="stay-offer-grid">
       <!-- Room Catalog Skeleton -->
       <v-sheet class="stay-offer-grid__room-catalog" :class="{
-        'border-thin': $device.isDesktop,
-        'border-0': !$device.isDesktop
+        'border-thin': isDesktop,
+        'border-0': !isDesktop
       }">
         <v-skeleton-loader
           type="text"
@@ -25,8 +25,8 @@
 
       <!-- Room Offer Skeleton -->
       <v-sheet class="stay-offer-grid__room-offer bg-transparent" :class="{
-        'border-thin': $device.isDesktop,
-        'border-0': !$device.isDesktop
+        'border-thin': isDesktop,
+        'border-0': !isDesktop
       }">
         <v-sheet class="bg-transparent" style="min-height: 147px;">
           <div class="d-flex flex-nowrap align-stretch justify-space-between pb-4">
@@ -77,7 +77,9 @@
     </div>
   </div>
 </template>
-
+<script setup>
+const { isDesktop } = useViewportState();
+</script>
 <style lang="scss">
 @use "~/assets/scss/room.scss";
 </style>

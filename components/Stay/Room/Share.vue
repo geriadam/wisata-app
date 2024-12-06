@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="openOffer" :open-on-click="openOffer" max-width="720" max-height="350" scrollable :fullscreen="!$device.isDesktop">
+  <v-dialog v-model="openOffer" :open-on-click="openOffer" max-width="720" max-height="350" scrollable :fullscreen="!isDesktop">
     <v-card rounded="lg" elevation="3" max-height="640">
       <v-card-title class="pa-0 d-none d-sm-flex flex-row flex-nowrap justify-center align-center position-relative">
         <div class="w-100">
@@ -8,7 +8,7 @@
             <span class="text-h6 text-md-h5 font-weight-bold">Share This Offer</span>
           </div>
         </div>
-        <v-btn size="sm" v-if="$device.isDesktop" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="right: 0; position: absolute;">
+        <v-btn size="sm" v-if="isDesktop" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="right: 0; position: absolute;">
           <v-icon color="grey-darken-3">mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -27,6 +27,9 @@
                   <span class="text-caption">IMAGE</span>
                 </v-tab>
               </v-tabs>
+              <v-btn size="sm" variant="text"class="ml-1 ml-md-0 mr-2" @click="closeModal" style="right: 0; top: 15px; position: absolute;">
+                <v-icon color="grey-darken-3">mdi-close</v-icon>
+              </v-btn>
             </div>
             <div class="h-100 bg-grey-lighten-4 position-relative">
               <v-tabs-window v-model="activeTab" class="h-full d-flex flex-row flex-nowrap justify-start align-stretch">
@@ -137,7 +140,7 @@
               </v-tabs-window>
             </div>
           </section>
-          <v-divider :vertical="$device.isDesktop"></v-divider>
+          <v-divider :vertical="isDesktop"></v-divider>
           <section class="stay-offer-sharing-tools__form d-flex flex-column flex-nowrap overflow-hidden">
             <section style="overflow: hidden auto;">
               <div>
@@ -216,7 +219,7 @@
 </template>
 
 <script setup>
-
+const { isMobile, isDesktop } = useViewportState();
 const props = defineProps({
   offer: {
     type: Object,
@@ -392,16 +395,13 @@ const zoomOut = () => (zoom.value = Math.max(0.1, zoom.value - 0.1));
   }
 }
 
-.v-window__container {
-  width: 100%;
-}
-
 .zoom-controls {
   position: absolute;
   right: -30px;
   top: 200px;
   transform: translateX(-50%);
   z-index: 10;
+  height: 40px;
 }
 
 .zoom-controls v-btn {
